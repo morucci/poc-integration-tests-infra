@@ -1,0 +1,19 @@
+---
+- name: "Start container"
+  lxc_container:
+    name: "{{ item.key }}"
+    container_log: true
+    state: started
+    container_config:
+      - "lxc.mount.entry = /lib/modules lib/modules none ro,bind 0 0"
+      - "lxc.autodev = 1"
+  with_dict: arg
+- name: "Be sure sshd started"
+  lxc_container:
+    name: "{{ item.key }}"
+    container_command: |
+      [ ! -f /etc/ssh/ssh_host_rsa_key ] && ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key -P ""
+      [ ! -f /etc/ssh/ssh_host_dsa_key ] && ssh-keygen -t dsa  -f /etc/ssh/ssh_host_dsa_key -p ""
+      service ssh restart
+      chown -R {{ item.value.user }}:{{ item.value.user }} {{ item.value.home }}/.ssh
+  with_dict: arg

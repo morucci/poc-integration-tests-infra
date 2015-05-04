@@ -1,0 +1,24 @@
+---
+site:
+  default_ssh_key: /home/fedora/.ssh/id_rsa.pub
+  network:
+    gateway: 192.168.100.1
+    nameserver: 8.8.8.8
+    domain: tests.dom
+    bridge: virbr0
+hosts:
+  puppetmaster:
+    base: precise
+    ip: 192.168.100.2
+    user: ubuntu
+    home: /home/ubuntu
+  node1:
+    base: precise
+    ip: 192.168.100.3
+    user: ubuntu
+    home: /home/ubuntu
+  node2:
+    base: trusty
+    ip: 192.168.100.4
+    user: root
+    home: /root

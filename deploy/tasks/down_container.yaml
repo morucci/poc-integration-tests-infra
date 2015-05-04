@@ -1,0 +1,7 @@
+---
+- name: "Stop container"
+  lxc_container:
+    name: "{{ item.key }}"
+    container_log: true
+    state: stopped
+  with_dict: arg

@@ -1,0 +1,12 @@
+---
+- hosts: localhost
+  gather_facts: no
+  vars_files:
+    - vars/config.yaml
+  tasks:
+    - name: "Load requested host module"
+      shell: modprobe -q ip6table_filter
+    - include: tasks/bridge.yaml bridge={{site.network.bridge}} gateway={{site.network.gateway}}
+    - include: tasks/install_container.yaml arg={{hosts}}
+    - include: tasks/setup_container.yaml arg={{hosts}} network={{site.network}} default_ssh_key={{site.default_ssh_key}}
+    - include: tasks/up_container.yaml arg={{hosts}}

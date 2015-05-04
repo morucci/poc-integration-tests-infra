@@ -1,0 +1,40 @@
+- name: "Install git"
+  apt: name=git state=present
+  become: yes
+- name: "Clone system-config"
+  git: repo=https://git.openstack.org/openstack-infra/system-config dest=/opt/system-config/production
+  become: yes
+- name: "Install Puppet"
+  shell: ./install_puppet.sh
+  args:
+    chdir: /opt/system-config/production/
+  become: yes
+- name: "Install Passenger"
+  apt: name=puppetmaster-passenger state=present
+  become: yes
+- name: "Install Hiera"
+  apt: name=hiera state=present
+  become: yes
+- name: "Install Modules"
+  shell: ./install_modules.sh
+  args:
+    chdir: /opt/system-config/production/
+  become: yes
+- name: "Create hiera data directory"
+  file: path=/etc/puppet/hieradata/production state=directory
+  become: yes
+- name: "Copy puppet-master manifest"
+  template: src=puppetmaster.j2 dest=/tmp/puppetmaster.pp
+- name: "Apply puppetmaster manifest"
+  shell: puppet apply --modulepath='/opt/system-config/production/modules:/etc/puppet/modules' /tmp/puppetmaster.pp
+  become: yes
+# From here this is custom - not the real way to deploy infra
+- name: "Remove run_all.sh"
+  shell: rm /opt/system-config/production/run_all.sh
+  become: yes
+- name: "Touch an empty run_all.sh"
+  shell: touch /opt/system-config/production/run_all.sh
+  become: yes
+- name: "Apply custom site.pp"
+  template: src=site.pp.j2 dest=/opt/system-config/production/manifests/site.pp
+  become: yes

@@ -1,0 +1,16 @@
+---
+- name: "Create container"
+  shell: mkdir -p /var/lib/lxc/{{ item.key }}/rootfs
+  with_dict: arg
+- name: "Create overlay workdir for container"
+  file: path=/var/lib/overlay_dir/{{ item.key }}/workdir state=directory
+  with_dict: arg
+- name: "Create overlay upperdir for container"
+  file: path=/var/lib/overlay_dir/{{ item.key }}/upperdir state=directory
+  with_dict: arg
+- name: "Mount rootfs"
+  shell: mount -t overlay -o upperdir=/var/lib/overlay_dir/{{ item.key }}/upperdir,lowerdir=/var/cache/int_tests/bases/{{ item.value.base }},workdir=/var/lib/overlay_dir/{{ item.key }}/workdir overlayfs /var/lib/lxc/{{ item.key }}/rootfs
+  with_dict: arg
+- name: "Copy default container config"
+  copy: src=/etc/lxc/default.conf dest=/var/lib/lxc/{{ item.key }}/config
+  with_dict: arg

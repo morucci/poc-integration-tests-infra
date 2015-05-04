@@ -1,0 +1,18 @@
+- name: "Install git"
+  apt: name=git state=present
+  become: yes
+- name: "Clone system-config"
+  git: repo=https://git.openstack.org/openstack-infra/system-config dest=/opt/system-config/production
+  become: yes
+- name: "Install Puppet"
+  shell: ./install_puppet.sh
+  args:
+    chdir: /opt/system-config/production/
+  become: yes
+- name: "Configure puppet.conf"
+  template: src=puppet.conf.j2 dest=/etc/puppet/puppet.conf
+  become: yes
+- name: "Register node against puppet master"
+  shell: puppet agent --test
+  ignore_errors: True
+  become: yes

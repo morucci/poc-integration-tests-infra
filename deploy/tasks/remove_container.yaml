@@ -1,0 +1,7 @@
+---
+- name: "Umount container rootfs"
+  shell: umount /var/lib/lxc/{{ item.key }}/rootfs
+  with_dict: arg
+- name: "Clean overlay"
+  shell: rm -Rf /var/lib/overlay_dir/{{ item.key }}
+  with_dict: arg

@@ -1,0 +1,6 @@
+---
+- name: Create bridge
+  shell: brctl addbr {{ bridge }} || true
+- name: Set bridge gateway
+  shell: ifconfig {{ bridge }} {{ gateway }}
+  

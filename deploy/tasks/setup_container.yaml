@@ -1,0 +1,24 @@
+---
+- name: "Custom container config (ubuntu)"
+  script: ubuntu_make_config.sh {{ item.key }}
+  with_dict: arg
+  when: item.value.base == "precise" or item.value.base == "trusty" 
+- name: "Inside container network interfaces conf (ubuntu)"
+  template: src=ubuntu_interfaces.j2 dest=/var/lib/lxc/{{ item.key }}/rootfs/etc/network/interfaces
+  with_dict: arg
+  when: item.value.base == "precise" or item.value.base == "trusty" 
+- name: "Inside container network set hostname"
+  lineinfile: dest=/var/lib/lxc/{{ item.key }}/rootfs/etc/hostname regexp=^.* line={{ item.key }}.{{ network.domain }}
+  with_dict: arg
+- name: "Inside container hosts conf"
+  template: src=hosts.j2 dest=/var/lib/lxc/{{ item.key }}/rootfs/etc/hosts
+  with_dict: arg
+- name: "Create .ssh for default user"
+  file: path=/var/lib/lxc/{{ item.key }}/rootfs/{{ item.value.home }}/.ssh/ mode=0700 state=directory
+  with_dict: arg
+- name: "Provision default public ssh key"
+  copy: src={{ default_ssh_key }} dest=/var/lib/lxc/{{ item.key }}/rootfs/{{ item.value.home }}/.ssh/authorized_keys
+  with_dict: arg
+- name: "Set preserve hostname in cloudinit config"
+  lineinfile: dest=/var/lib/lxc/{{ item.key }}/rootfs/etc/cloud/cloud.cfg regexp=^preserve_hostname.* line="preserve_hostname':' True"
+  with_dict: arg

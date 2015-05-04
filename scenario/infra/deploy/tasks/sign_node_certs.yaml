@@ -1,0 +1,2 @@
+- name:
+  shell: sudo puppet cert sign --all

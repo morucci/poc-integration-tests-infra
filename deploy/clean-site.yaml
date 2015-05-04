@@ -1,0 +1,7 @@
+---
+- hosts: localhost
+  gather_facts: no
+  vars_files:
+    - vars/config.yaml
+  tasks:
+    - include: tasks/remove_container.yaml arg={{hosts}}

@@ -1,0 +1,8 @@
+127.0.0.1 {{ item.key }}.{{ network.domain }} {{ item.key }} localhost
+::1     localhost ip6-localhost ip6-loopback
+ff02::1 ip6-allnodes
+ff02::2 ip6-allrouters
+
+{% for name, details in arg.iteritems() %}
+{{ details.ip }} {{ name }}.{{ network.domain }} {{ name }}
+{% endfor %}

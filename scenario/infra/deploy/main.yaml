@@ -1,0 +1,21 @@
+---
+- hosts: puppetmaster
+  gather_facts: no
+  vars_files:
+    - vars/config.yaml
+  tasks:
+    - include: tasks/setup_puppetmaster.yaml
+- hosts: nodes
+  vars_files:
+    - vars/config.yaml
+  tasks:
+    - include: tasks/setup_nodes.yaml
+- hosts: puppetmaster
+  tasks:
+    - include: tasks/sign_node_certs.yaml
+- hosts: nodes
+  tasks:
+    - name: "Run puppet agent"
+      shell: puppet agent -t
+      ignore_errors: True
+      become: yes

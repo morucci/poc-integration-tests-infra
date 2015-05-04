@@ -1,0 +1,7 @@
+---
+- hosts: localhost
+  gather_facts: no
+  vars_files:
+    - vars/config.yaml
+  tasks:
+    - include: tasks/down_container.yaml arg={{hosts}}
