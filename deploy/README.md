@@ -8,7 +8,7 @@ In order to spawn containers you need to play setup-site.yaml playbook.
 Ansible will setup all needed containers according to vars/hosts.yaml
 
 ```
-$ sudo ansible-playbook -i /dev/null -l localhost setup-site.yaml
+$ ansible-playbook -i /dev/null -l localhost setup-site.yaml
 ```
 
 Once done jump in the scenario/infra directory.
@@ -22,7 +22,7 @@ playbooks:
 
 ```
 # Shutdown containers
-$ sudo ansible-playbook -i /dev/null -l localhost shutdown-site.yaml
+$ ansible-playbook -i /dev/null -l localhost shutdown-site.yaml
 # Clean container rootfs (wipe overlay work dirs)
-$ sudo ansible-playbook -i /dev/null -l localhost clean-site.yaml
+$ ansible-playbook -i /dev/null -l localhost clean-site.yaml
 ```

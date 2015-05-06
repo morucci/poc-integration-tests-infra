@@ -11,7 +11,7 @@ BASE_LXC=/var/lib/lxc
 BASE_DISTS="precise trusty"
 
 function install_req {
-  sudo yum install lxc lxc-templates git python-pip
+  sudo yum install -y lxc lxc-devel lxc-templates git python-pip
   sudo pip install ansible
   [ ! -d /tmp/diskimage-builder ] && {
     git clone https://github.com/openstack/diskimage-builder /tmp/diskimage-builder
@@ -29,7 +29,7 @@ function install_req {
 }
 
 function setup_overlay {
-  mkdir -p /var/lib/overlay_dir/
+  sudo mkdir -p /var/lib/overlay_dir/
 }
 
 function get_dist {
@@ -60,3 +60,9 @@ for dist in $BASE_DISTS; do
   get_dist $dist
   adapt_dist $dist
 done
+
+# Disable SELinux because it does not support overlayfs yet
+grep -q SELINUX=disabled /etc/selinux/config || {
+    sudo sed -i -e 's/^SELINUX=.*/SELINUX=disabled/' /etc/selinux/config
+    echo "reboot to disable selinux now"
+}
