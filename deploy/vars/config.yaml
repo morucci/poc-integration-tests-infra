@@ -9,16 +9,19 @@ site:
 hosts:
   puppetmaster:
     base: precise
+    type: overlayfs
     ip: 192.168.100.2
     user: ubuntu
     home: /home/ubuntu
   node1:
     base: precise
+    type: bare
     ip: 192.168.100.3
     user: ubuntu
     home: /home/ubuntu
   node2:
     base: trusty
+    type: overlayfs
     ip: 192.168.100.4
     user: root
     home: /root

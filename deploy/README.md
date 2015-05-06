@@ -5,7 +5,7 @@ deploy
 ------
 
 In order to spawn containers you need to play setup-site.yaml playbook.
-Ansible will setup all needed containers according to vars/hosts.yaml
+Ansible will setup all needed containers according to vars/config.yaml
 
 ```
 $ ansible-playbook -i /dev/null -l localhost setup-site.yaml
