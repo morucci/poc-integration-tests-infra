@@ -11,7 +11,7 @@ BASE_LXC=/var/lib/lxc
 BASE_DISTS="precise trusty"
 
 function install_req {
-  sudo yum install -y lxc lxc-devel lxc-templates git python-pip
+  sudo yum install -y lxc lxc-devel lxc-templates git python-pip bridge-utils which gcc python-devel openssl
   sudo pip install ansible
   [ ! -d /tmp/diskimage-builder ] && {
     git clone https://github.com/openstack/diskimage-builder /tmp/diskimage-builder

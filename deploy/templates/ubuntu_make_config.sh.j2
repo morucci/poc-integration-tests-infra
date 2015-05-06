@@ -1,0 +1,12 @@
+#!/bin/bash
+
+set -ex
+
+{{ copy_configuration_function.stdout }}
+
+LXC_TEMPLATE_CONFIG=/usr/share/lxc/config
+
+[ -z "$1" ] && exit 1
+name=$1
+
+copy_configuration /var/lib/lxc/${name} /var/lib/lxc/${name}/rootfs $name x86_64 precise

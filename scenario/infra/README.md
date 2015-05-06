@@ -6,6 +6,7 @@ here we deploy a puppetmaster and deploy openstack-project/server on two nodes.
 All is managed by main.yaml playbook.
 
 ```
+$ export ANSIBLE_HOST_KEY_CHECKING=False
 $ ansible-playbook -i inventory.yaml main.yaml
 ```
 

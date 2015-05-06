@@ -1,0 +1,6 @@
+# Generated files
+deploy/files/ubuntu_make_config.sh
+prepare/ubuntu-amd64.d/
+
+# Temp files
+*.swp
