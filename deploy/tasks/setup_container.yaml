@@ -1,4 +1,10 @@
 ---
+- name: "Extract the copy_configuration script from lxc-templates"
+  command: sed -e '/^copy_configuration()/,/^}/!d' /usr/share/lxc/templates/lxc-ubuntu
+  register: copy_configuration_function
+- name: "Prepare the ubunutu_make_config script"
+  template: src=ubuntu_make_config.sh.j2 dest=./files/ubuntu_make_config.sh
+  with_dict: copy_configuration_function
 - name: "Custom container config (ubuntu)"
   script: ubuntu_make_config.sh {{ item.key }}
   with_dict: arg
