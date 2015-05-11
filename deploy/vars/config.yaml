@@ -25,3 +25,9 @@ hosts:
     ip: 192.168.100.4
     user: root
     home: /root
+  node3:
+    base: "21"
+    type: bare
+    ip: 192.168.100.5
+    user: fedora
+    home: /home/fedora

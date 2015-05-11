@@ -1,0 +1,19 @@
+#!/bin/bash
+
+set -x
+
+create_hwaddr()
+{
+    openssl rand -hex 5 | sed -e 's/\(..\)/:\1/g; s/^/fe/'
+}
+
+{{ copy_configuration_function.stdout }}
+
+LXC_TEMPLATE_CONFIG=/usr/share/lxc/config
+
+[ -z "$1" ] && exit 1
+name=$1
+
+config_path=/var/lib/lxc/${name}
+rootfs_path=$config_path/rootfs
+copy_configuration

@@ -1,10 +1,4 @@
 ---
-- name: "Extract the copy_configuration script from lxc-templates"
-  command: sed -e '/^copy_configuration()/,/^}/!d' /usr/share/lxc/templates/lxc-ubuntu
-  register: copy_configuration_function
-- name: "Prepare the ubunutu_make_config script"
-  template: src=ubuntu_make_config.sh.j2 dest=./files/ubuntu_make_config.sh
-  with_dict: copy_configuration_function
 - name: "Custom container config (ubuntu)"
   script: ubuntu_make_config.sh {{ item.key }}
   with_dict: arg
@@ -13,6 +7,20 @@
   template: src=ubuntu_interfaces.j2 dest=/var/lib/lxc/{{ item.key }}/rootfs/etc/network/interfaces
   with_dict: arg
   when: item.value.base == "precise" or item.value.base == "trusty" 
+
+- name: "Custom container config (fedora)"
+  script: fedora_make_config.sh {{ item.key }}
+  with_dict: arg
+  when: item.value.base == "21"
+- name: "Inside container network ifcfg-eth0 conf (fedora)"
+  template: src=fedora-ifcfg-eth0.j2 dest=/var/lib/lxc/{{ item.key }}/rootfs/etc/sysconfig/network-scripts/ifcfg-eth0
+  with_dict: arg
+  when: item.value.base == "21"
+- name: "Inside container network network conf (fedora)"
+  template: src=fedora-network.j2 dest=/var/lib/lxc/{{ item.key }}/rootfs/etc/sysconfig/network
+  with_dict: arg
+  when: item.value.base == "21"
+
 - name: "Inside container network set hostname"
   lineinfile: dest=/var/lib/lxc/{{ item.key }}/rootfs/etc/hostname regexp=^.* line={{ item.key }}.{{ network.domain }}
   with_dict: arg
